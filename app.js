@@ -14,16 +14,19 @@ app.post("/mail", (req, res) => {
         let testAccount =  await nodemailer.createTestAccount();
 
         let transporter = nodemailer.createTransport({
-            service: "gmail",
-            host: "smtp.gmail.com",
+            host: "mail.mtlx.us",
+            port: 26,
             auth: {
-                user: "maieltechnologies@gmail.com",
-                pass: "mtlx2020",
+                user: "info@mtlx.us",
+                pass: "T[GZ1aVUugC1",
+            },
+            tls: { 
+                rejectUnauthorized: false 
             },
         });
 
         let info = await transporter.sendMail({
-            from: "maieltechnologies@gmail.com",
+            from: "info@mtlx.us",
             to: "iakinnubi@gmail.com",
             subject: "Hello From Express",
             text: "Mail from Nodemailer",
@@ -33,7 +36,7 @@ app.post("/mail", (req, res) => {
         console.log("message sent: "+ info.messageId)
     }
 
-    main();
+    main().catch(console.error);
 
     let formData = req.body;
     res.status(200).json(formData);
