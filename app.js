@@ -1,6 +1,9 @@
 import express from "express";
 import bodyParser from "body-parser";
 import nodemailer from "nodemailer";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const app  = express();
 
@@ -17,8 +20,8 @@ app.post("/mail", (req, res) => {
             host: "mail.mtlx.us",
             port: 26,
             auth: {
-                user: "info@mtlx.us",
-                pass: "T[GZ1aVUugC1",
+                user: process.env.USER_EMAIL,
+                pass: process.env.EMAIL_PASSWORD,
             },
             tls: { 
                 rejectUnauthorized: false 
