@@ -1,53 +1,44 @@
 import express from "express";
 import bodyParser from "body-parser";
-import nodemailer from "nodemailer";
-import dotenv from "dotenv";
+import main from "./helper.js";
 
-dotenv.config();
 
 const app  = express();
-
-
 
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.post("/mail", (req, res) => {
-
-    async function main() {
-        let testAccount =  await nodemailer.createTestAccount();
-
-        let transporter = nodemailer.createTransport({
-            host: "mail.mtlx.us",
-            port: 26,
-            auth: {
-                user: process.env.USER_EMAIL,
-                pass: process.env.EMAIL_PASSWORD,
-            },
-            tls: { 
-                rejectUnauthorized: false 
-            },
-        });
-
-        let info = await transporter.sendMail({
-            from: "info@mtlx.us",
-            to: "iakinnubi@gmail.com",
-            subject: "Hello From Express",
-            text: "Mail from Nodemailer",
-            html: "<b>Mail from Nodemailer</b>",
-        });
-
-        console.log("message sent: "+ info.messageId)
-    }
-
-    main().catch(console.error);
-
+    
     let formData = req.body;
+    let message = `Hello, ${formData.firstName}
+                     has booked a reservation with your restaurant <br><br>
+                     <br>Details: </br>
+                     <br> First Name: ${formData.firstName},
+                     <br> Last Name: ${formData.lastName},
+                     <br> email: ${formData.email},
+                     <br> telephone: ${formData.telephone},
+                     <br> Number of Guests: ${formData.guests},
+                     <br> Reservation Date : ${formData.reservationDate},
+                     <br> Duration: ${formData.timeFrom} to ${formData.timeTo},
+                     <br> Reservation Type: ${formData.reservationType}
+                     <br> Custom Reservation Type: ${formData.others}
+                     <br> Special Request: ${formData.specialRequest}`;
+                     
+    let recepient = "iakinnubi@gmail.com, yokhanan1@gmail.com, gavrieljonah@gmail.com, lauremanyi@gmail.com ";
+    let mailSubject = "Hello From Express";
+
+    main(recepient, mailSubject, message).catch(console.error);
+   
+    // let formData = req.body;
+
     res.status(200).json(formData);
 });
 
 app.use((req, res) => {
     res.json({"message": "hello from express in json."});
+   
 });
+
 
 export default app;
 
